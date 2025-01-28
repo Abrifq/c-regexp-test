@@ -8,6 +8,28 @@ Tech/libraries used: fsetpos/fgetpos from stdio, regcomp/regexec from regex.h
 
 The main function tries to [read a word](#getword) from stdin and check the word if it has "cat" inside of it.
 
+Get the code via git:
+
+```sh
+git clone https://github.com/Abrifq/c-regexp-test
+# or
+gh repo clone Abrifq/c-regexp-test
+
+# and then move into the repository
+cd c-regexp-test
+```
+
+Try running it with:
+
+```sh
+make out/main
+./out/main < ./test-input
+```
+
+You can edit the [test input file](./test-input) to change what's tested in the program.
+Just write words, a space or newline or a tab will mark a word's end.
+Also, the program should be able to handle the End-Of-File.
+
 ### getWord
 
 **Works with file/pipes but not with tty stdin reads for now.**
