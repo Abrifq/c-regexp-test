@@ -25,6 +25,7 @@ int main() {
         else
             printf("The word \"%s\" has \"cat\" in it.\n", word);
     } while (!feof(stdin));
+    if (word != NULL) free(word);
     printf("Bye-bye...\n");
     return 0;
 }
