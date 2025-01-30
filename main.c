@@ -9,8 +9,7 @@ int main() {
     printf("Write a word and press enter to see if there is a \"cat\" in it.\nWrite '\\q' to exit the program.\n");
     regex_t hasCatRegexp;
     regmatch_t catMatch[1];
-    int matching;
-    if (regcomp(&hasCatRegexp, "cat", REG_ICASE | REG_NOSUB))
+        if (regcomp(&hasCatRegexp, "cat", REG_ICASE | REG_NOSUB))
     {
         fprintf(stderr, "Couldn't compile regexp.\n");
         return 1;
@@ -20,9 +19,8 @@ int main() {
         printf("Write a word: ");
         getWord(&word);
         if (word == NULL) break;
-        matching = regexec(&hasCatRegexp, word, 1, catMatch, 0);
-        if (word[0] == '\\' && word[1] == 'q') break;
-        if (matching == REG_NOMATCH)
+                if (word[0] == '\\' && word[1] == 'q') break;
+        if (regexec(&hasCatRegexp, word, 1, catMatch, 0) == REG_NOMATCH)
             printf("The word \"%s\" does not have \"cat\" in it.\n", word);
         else
             printf("The word \"%s\" has \"cat\" in it.\n", word);
