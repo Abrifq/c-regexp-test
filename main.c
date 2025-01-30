@@ -9,7 +9,7 @@ int main() {
     printf("Write a word and press enter to see if there is a \"cat\" in it.\nWrite '\\q' to exit the program.\n");
     regex_t hasCatRegexp;
     regmatch_t catMatch[1];
-        if (regcomp(&hasCatRegexp, "cat", REG_ICASE | REG_NOSUB))
+    if (regcomp(&hasCatRegexp, "cat", REG_ICASE | REG_NOSUB))
     {
         fprintf(stderr, "Couldn't compile regexp.\n");
         return 1;
@@ -19,7 +19,7 @@ int main() {
         printf("Write a word: ");
         getWord(&word);
         if (word == NULL) break;
-                if (word[0] == '\\' && word[1] == 'q') break;
+        if (word[0] == '\\' && word[1] == 'q') break;
         if (regexec(&hasCatRegexp, word, 1, catMatch, 0) == REG_NOMATCH)
             printf("The word \"%s\" does not have \"cat\" in it.\n", word);
         else
@@ -35,6 +35,7 @@ void getWord(char** wordAddr) {
     if (*wordAddr != NULL) { free(*wordAddr); *wordAddr = NULL; }
 
     fpos_t filePos;
+    int __debug_spacesSkipped = 0;
     int nextCharacter;
     fgetpos(stdin, &filePos);
 
@@ -44,14 +45,17 @@ void getWord(char** wordAddr) {
             break;
         }
         fgetpos(stdin, &filePos);
+        __debug_spacesSkipped++;
     } while (nextCharacter != EOF);
-    if (nextCharacter == EOF) return;
+    fprintf(stderr, "Skipped %d space characters.\n", __debug_spacesSkipped);
+    if (nextCharacter == EOF) { fprintf(stderr, "Reached end of file before a word was found.\n"); return; }
     int strlen = 0;
     while (nextCharacter != EOF && !isspace(nextCharacter)) {
         strlen += 1;
         nextCharacter = getchar();
     }
-
+    fprintf(stderr, "Read %d non-space characters.\n", strlen);
+    if (nextCharacter == EOF) { fprintf(stderr, "Reached end of file while reading a word.\n"); }
     //TRY mallocing before assigning
 
     char* tmp_p = malloc(sizeof(char) * (1 + strlen));
@@ -62,9 +66,11 @@ void getWord(char** wordAddr) {
     }
 
     *wordAddr = tmp_p;
-    memset(*wordAddr, '\0', strlen + 1);
     fsetpos(stdin, &filePos);
+    //maybe i should just change this to scanf, lol.
+    memset(*wordAddr, '\0', strlen + 1);
     for (int i = 0; i < strlen;i++) (*wordAddr)[i] = getchar();
+    fprintf(stderr, "Read word: \"%s\"\n", tmp_p);
     return;
 }
 
