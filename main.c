@@ -35,21 +35,21 @@ void getWord(char** wordAddr) {
     if (*wordAddr != NULL) { free(*wordAddr); *wordAddr = NULL; }
 
     fpos_t filePos;
-    int next;
+    int nextCharacter;
     fgetpos(stdin, &filePos);
 
     do {
-        next = getchar();
-        if (!isspace(next)) {
+        nextCharacter = getchar();
+        if (!isspace(nextCharacter)) {
             break;
         }
         fgetpos(stdin, &filePos);
-    } while (next != EOF);
-    if (next == EOF) return;
+    } while (nextCharacter != EOF);
+    if (nextCharacter == EOF) return;
     int strlen = 0;
-    while (next != EOF && !isspace(next)) {
+    while (nextCharacter != EOF && !isspace(nextCharacter)) {
         strlen += 1;
-        next = getchar();
+        nextCharacter = getchar();
     }
 
     //TRY mallocing before assigning
